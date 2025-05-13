@@ -395,6 +395,16 @@
         "build": {
           "build/net6.0/xunit.runner.visualstudio.props": {}
         }
+      },
+      "TeachLib/1.0.0": {
+        "type": "project",
+        "framework": ".NETCoreApp,Version=v10.0",
+        "compile": {
+          "bin/placeholder/TeachLib.dll": {}
+        },
+        "runtime": {
+          "bin/placeholder/TeachLib.dll": {}
+        }
       }
     }
   },
@@ -895,11 +905,17 @@
         "xunit.runner.visualstudio.2.8.2.nupkg.sha512",
         "xunit.runner.visualstudio.nuspec"
       ]
+    },
+    "TeachLib/1.0.0": {
+      "type": "project",
+      "path": "../teach/TeachLib/TeachLib.csproj",
+      "msbuildProject": "../teach/TeachLib/TeachLib.csproj"
     }
   },
   "projectFileDependencyGroups": {
     "net10.0": [
       "Microsoft.NET.Test.Sdk >= 17.12.0",
+      "TeachLib >= 1.0.0",
       "coverlet.collector >= 6.0.2",
       "xunit >= 2.9.2",
       "xunit.runner.visualstudio >= 2.8.2"
@@ -929,7 +945,11 @@
       "frameworks": {
         "net10.0": {
           "targetAlias": "net10.0",
-          "projectReferences": {}
+          "projectReferences": {
+            "C:\\Users\\Joel Ndiba Mwaura\\GitHub\\cse212Tests\\Test-w2\\week02\\teach\\TeachLib\\TeachLib.csproj": {
+              "projectPath": "C:\\Users\\Joel Ndiba Mwaura\\GitHub\\cse212Tests\\Test-w2\\week02\\teach\\TeachLib\\TeachLib.csproj"
+            }
+          }
         }
       },
       "warningProperties": {
