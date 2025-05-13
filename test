@@ -1,37 +1,45 @@
-[Test]
-public void TestQueueDefaultSize()
-{
-    var service = new CustomerService(0);
-    Assert.Equal(10, service.MaxSize);
-}
+using Xunit;
 
-[Test]
-public void TestAddCustomerSuccess()
+public class CustomerServiceTests
 {
-    var service = new CustomerService(2);
-    service.AddNewCustomer("Alice", "123", "Password reset");
-    // Confirm queue size or printed message
-}
+    [Fact]
+    public void TestQueueDefaultSize()
+    {
+        var service = new CustomerService(0);
+        Assert.Equal(10, service.MaxSize);
+    }
 
-[Test]
-public void TestAddCustomerFullQueue()
-{
-    var service = new CustomerService(1);
-    service.AddNewCustomer("Alice", "123", "Issue A");
-    service.AddNewCustomer("Bob", "124", "Issue B"); // Should trigger error
-}
+    [Fact]
+    public void TestAddCustomerSuccess()
+    {
+        var service = new CustomerService(2);
+        var result = service.AddNewCustomer("Alice", "123", "Password reset");
+        Assert.Equal("Customer added.", result);
+    }
 
-[Test]
-public void TestServeCustomer()
-{
-    var service = new CustomerService(2);
-    service.AddNewCustomer("Alice", "123", "Internet Issue");
-    service.ServeCustomer(); // Should print Alice’s issue
-}
+    [Fact]
+    public void TestAddCustomerFullQueue()
+    {
+        var service = new CustomerService(1);
+        service.AddNewCustomer("Alice", "123", "Issue A");
+        var result = service.AddNewCustomer("Bob", "124", "Issue B");
+        Assert.Equal("Maximum Number of Customers in Queue.", result);
+    }
 
-[Test]
-public void TestServeEmptyQueue()
-{
-    var service = new CustomerService(2);
-    service.ServeCustomer(); // Should print error message
+    [Fact]
+    public void TestServeCustomer()
+    {
+        var service = new CustomerService(2);
+        service.AddNewCustomer("Alice", "123", "Internet Issue");
+        var result = service.ServeCustomer();
+        Assert.Equal("Serving: Alice (123)  : Internet Issue", result);
+    }
+
+    [Fact]
+    public void TestServeEmptyQueue()
+    {
+        var service = new CustomerService(2);
+        var result = service.ServeCustomer();
+        Assert.Equal("No customers in the queue.", result);
+    }
 }
