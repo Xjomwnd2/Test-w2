@@ -1,34 +1,57 @@
-namespace TeachLib;
-
-public class CustomerService
+namespace CustomerServiceApp
 {
-    private List<Customer> _queue = new List<Customer>();
-    private int _maxSize;
-
-    public int MaxSize => _maxSize;
-    public int QueueCount => _queue.Count;
-
-    public CustomerService(int maxSize)
+    public class CustomerService
     {
-        _maxSize = maxSize > 0 ? maxSize : 10;
-    }
+        private readonly List<Customer> _queue = new();
+        public int MaxSize { get; }
 
-    public string AddNewCustomer(string name, string id, string problem)
-    {
-        if (_queue.Count >= _maxSize)
-            return "Maximum Number of Customers in Queue.";
+        public CustomerService(int maxSize)
+        {
+            MaxSize = maxSize <= 0 ? 10 : maxSize;
+        }
 
-        _queue.Add(new Customer(name, id, problem));
-        return "Customer added.";
-    }
+        public bool AddNewCustomer(string name, string id, string problem)
+        {
+            if (_queue.Count >= MaxSize)
+            {
+                Console.WriteLine("Maximum Number of Customers in Queue.");
+                return false;
+            }
 
-    public string ServeCustomer()
-    {
-        if (_queue.Count == 0)
-            return "No customers in the queue.";
+            var customer = new Customer(name, id, problem);
+            _queue.Add(customer);
+            return true;
+        }
 
-        var customer = _queue[0];
-        _queue.RemoveAt(0);
-        return $"Serving: {customer}";
+        public Customer? ServeCustomer()
+        {
+            if (_queue.Count == 0)
+            {
+                Console.WriteLine("No customers to serve.");
+                return null;
+            }
+
+            var customer = _queue[0];
+            _queue.RemoveAt(0);
+            return customer;
+        }
+
+        public int GetQueueSize() => _queue.Count;
+
+        private class Customer
+        {
+            public string Name { get; }
+            public string AccountId { get; }
+            public string Problem { get; }
+
+            public Customer(string name, string accountId, string problem)
+            {
+                Name = name;
+                AccountId = accountId;
+                Problem = problem;
+            }
+
+            public override string ToString() => $"{Name} ({AccountId}) : {Problem}";
+        }
     }
 }
