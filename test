@@ -1,4 +1,5 @@
 using Xunit;
+using CustomerServiceApp;
 
 public class CustomerServiceTests
 {
@@ -14,7 +15,8 @@ public class CustomerServiceTests
     {
         var service = new CustomerService(2);
         var result = service.AddNewCustomer("Alice", "123", "Password reset");
-        Assert.Equal("Customer added.", result);
+        Assert.True(result);
+        Assert.Equal(1, service.GetQueueSize());
     }
 
     [Fact]
@@ -22,8 +24,8 @@ public class CustomerServiceTests
     {
         var service = new CustomerService(1);
         service.AddNewCustomer("Alice", "123", "Issue A");
-        var result = service.AddNewCustomer("Bob", "124", "Issue B");
-        Assert.Equal("Maximum Number of Customers in Queue.", result);
+        var result = service.AddNewCustomer("Bob", "124", "Issue B"); // Should fail
+        Assert.False(result);
     }
 
     [Fact]
@@ -31,15 +33,16 @@ public class CustomerServiceTests
     {
         var service = new CustomerService(2);
         service.AddNewCustomer("Alice", "123", "Internet Issue");
-        var result = service.ServeCustomer();
-        Assert.Equal("Serving: Alice (123)  : Internet Issue", result);
+        var served = service.ServeCustomer();
+        Assert.NotNull(served);
+        Assert.Equal("Alice (123) : Internet Issue", served.ToString());
     }
 
     [Fact]
     public void TestServeEmptyQueue()
     {
         var service = new CustomerService(2);
-        var result = service.ServeCustomer();
-        Assert.Equal("No customers in the queue.", result);
+        var served = service.ServeCustomer();
+        Assert.Null(served);
     }
 }
